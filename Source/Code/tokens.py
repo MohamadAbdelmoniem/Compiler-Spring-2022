@@ -8,5 +8,5 @@ keywords = {
     "end": "END",
 }
 symbols={
-    ";":"semi colon"
+    ";": "semi colon"
 }
