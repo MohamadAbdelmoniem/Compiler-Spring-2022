@@ -1,5 +1,4 @@
 from automata.fa.dfa import DFA
-from automata.fa.dfa import DFA
 from visual_automata.fa.dfa import VisualDFA
 
 dfa = DFA(
