@@ -16,3 +16,5 @@ dfa = VisualDFA(
 )
 
 dfa.show_diagram(view=True)
+#minimal_dfa = VisualDFA.minify(dfa)   #method to optimize dfa
+#minimal_dfa.show_diagram(view=True)
