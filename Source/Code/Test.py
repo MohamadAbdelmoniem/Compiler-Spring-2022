@@ -4,8 +4,7 @@ import tokens as tk
 
 input_string = "if 1 then x := 5 ; y := 5 ; end"
 
-reg=re.compile(r'if\s\d\sthen\s[a-z]\s:=\s\d\s;\s[a-z]\s:=\s\d\s;\send')
-
+reg=re.compile(r'if\s\d\sthen(\s[a-z]\s:=\s\d\s;)+\send')
 
 matches=reg.finditer(input_string)
 for match in matches:
