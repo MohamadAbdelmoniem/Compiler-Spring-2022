@@ -1,7 +1,7 @@
 from automata.fa.dfa import DFA
 from visual_automata.fa.dfa import VisualDFA
 
-dfa = DFA(
+dfa = VisualDFA(
     states={"q0", "q1", "q2", "q3", "q4"},
     input_symbols={"0", "1"},
     transitions={
@@ -15,5 +15,4 @@ dfa = DFA(
     final_states={"q2", "q4"},
 )
 
-dfa = VisualDFA(dfa)
 dfa.show_diagram(view=True)
