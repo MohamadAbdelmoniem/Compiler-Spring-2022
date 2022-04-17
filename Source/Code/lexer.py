@@ -1,20 +1,24 @@
 import nltk as nltk
 import re
+
+
 def lexer():
-    input_code=open("/Users/karim/Desktop/Compiler-Spring-2022/Source/Code/input",'r')
+    input_code = open("/Users/karim/Desktop/Compiler-Spring-2022/Source/Code/input",
+                      'r')  # open input file in read mode
+    # defining tokens
     operators = "(:=)"
     keywords = "if|then|else|end"
     symbols = ";"
     numbers = r'(\d+)'
     identifier = '[a-z]'
-    tokens=[]
-
-    lines=input_code.readlines()
+    tokens = []
+    # tokenizing the input file
+    lines = input_code.readlines()
     print(lines)
     for line in lines:
         tokens.extend(nltk.wordpunct_tokenize(line))
     print(tokens)
-
+    # printing tokens
     for token in tokens:
         if re.findall(operators, token):
             print(token, "is an operator")
@@ -28,5 +32,6 @@ def lexer():
             print(token, "is an identifier")
 
     input_code.close()
+
 
 lexer()
