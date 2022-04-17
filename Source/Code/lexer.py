@@ -43,7 +43,7 @@ def lexer():
             allSymbols = allSymbols + 'e'
         if token == 'end':
             allSymbols = allSymbols + 'n'
-        if type(token) == int:
+        if token.isdigit():
             allSymbols = allSymbols + 'z'
     input_code.close()
 
