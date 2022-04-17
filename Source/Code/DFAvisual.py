@@ -3,7 +3,7 @@ from visual_automata.fa.dfa import VisualDFA
 
 dfa = VisualDFA(
     states={"q0", "q1", "q2", "q3", "q4"},
-    input_symbols={"0", "1"},
+    input_symbols={"0", "1"}, #alphabets
     transitions={
         "q0": {"0": "q3", "1": "q1"},
         "q1": {"0": "q3", "1": "q2"},
