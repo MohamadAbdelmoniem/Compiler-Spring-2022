@@ -8,7 +8,7 @@ from visual_automata.fa.dfa import VisualDFA
 def lexer():
     input_code = open("D:\Ziad\Projects\Compiler-Spring-2022\Source\Code\input",#replace by path to input file
                       'r')  # open input file in read mode
-
+    global allSymbols
     # defining tokens
     operators = "(:=)"
     keywords = "if|then|else|end"
@@ -34,7 +34,17 @@ def lexer():
             print(token, "is a symbol")
         elif re.findall(identifier, token):
             print(token, "is an identifier")
-
+    for token in tokens: #gives the tokens a code symbol
+        if token == "if":
+            allSymbols = 'i'
+        if token == "then":
+            allSymbols = allSymbols + 't'
+        if token == "else":
+            allSymbols = allSymbols + 'e'
+        if token == 'end':
+            allSymbols = allSymbols + 'n'
+        if type(token) == int:
+            allSymbols = allSymbols + 'z'
     input_code.close()
 
 
@@ -42,20 +52,23 @@ lexer()
 
 
 
-dfa = DFA(
-    states={"start","if","then","else","end","stuck"},
-    input_symbols={"if","then","else","end"},
+dfa2 = VisualDFA(
+    states={"q0","q1","q2","q4","q5","q3","q6"},
+    input_symbols={"i","t","e","n","z"},
     transitions={
-        "start":{"if":"if","then": "stuck","else" :"stuck","end":"stuck"},
-        "if": {"if":"stuck","then": "then","else" :"stuck","end":"stuck"},
-        "then":{"if":"stuck","then":"stuck","else":"else","end":"stuck"},
-        "else":{"if":"stuck","then":"stuck","else":"stuck","end":"end"},
-        "end":{"if":"stuck","then":"stuck","else":"stuck","end":"end"},
-        "stuck":{"if":"stuck","then":"stuck","else":"stuck","end":"stuck"}
+        "q0":{"i":"q1","t": "q5","e" :"q5","n":"q5","z":"q5"}, #start
+        "q1":{"i":"q5","t": "q5","e" :"q5","n":"q5","z":"q6"},#if
+        "q2":{"i":"q5","t":"q5","e":"q3","n":"q5","z":"q5"},#then
+        "q3":{"i":"q5","t":"q5","e":"q5","n":"q4","z":"q5"},#else
+        "q4":{"i":"q5","t":"q5","e":"q5","n":"q4","z":"q5"},#end
+        "q5":{"i":"q5","t":"q5","e":"q5","n":"q5","z":"q5"},#stuck
+        "q6":{"i":"q5","t":"q2","z":"q6","e":"q5","n":"q5"}#number
     },
-    initial_state="start",
-    final_states={"end"},
+    initial_state="q0",
+    final_states={"q4"},
 )
 
-dfa = VisualDFA(dfa)
-dfa.show_diagram("if")
+
+
+dfa2.show_diagram(allSymbols,view=True)
+print(allSymbols)

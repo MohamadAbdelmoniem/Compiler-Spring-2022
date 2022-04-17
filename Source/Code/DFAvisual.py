@@ -15,6 +15,6 @@ dfa = VisualDFA(
     final_states={"q2", "q4"},
 )
 
-dfa.show_diagram(view=True)
+dfa.show_diagram("1000" , view=True)
 #minimal_dfa = VisualDFA.minify(dfa)   #method to optimize dfa
 #minimal_dfa.show_diagram(view=True)
