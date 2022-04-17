@@ -3,8 +3,9 @@ import re
 
 
 def lexer():
-    input_code = open("/Users/karim/Desktop/Compiler-Spring-2022/Source/Code/input",
+    input_code = open("D:\Ziad\Projects\Compiler-Spring-2022\Source\Code\input",#replace by path to input file
                       'r')  # open input file in read mode
+
     # defining tokens
     operators = "(:=)"
     keywords = "if|then|else|end"
