@@ -1,6 +1,9 @@
 import nltk as nltk
 import re
 
+from automata.fa.dfa import DFA
+from visual_automata.fa.dfa import VisualDFA
+
 
 def lexer():
     input_code = open("D:\Ziad\Projects\Compiler-Spring-2022\Source\Code\input",#replace by path to input file
@@ -36,3 +39,23 @@ def lexer():
 
 
 lexer()
+
+
+
+dfa = DFA(
+    states={"start","if","then","else","end","stuck"},
+    input_symbols={"if","then","else","end"},
+    transitions={
+        "start":{"if":"if","then": "stuck","else" :"stuck","end":"stuck"},
+        "if": {"if":"stuck","then": "then","else" :"stuck","end":"stuck"},
+        "then":{"if":"stuck","then":"stuck","else":"else","end":"stuck"},
+        "else":{"if":"stuck","then":"stuck","else":"stuck","end":"end"},
+        "end":{"if":"stuck","then":"stuck","else":"stuck","end":"end"},
+        "stuck":{"if":"stuck","then":"stuck","else":"stuck","end":"stuck"}
+    },
+    initial_state="start",
+    final_states={"end"},
+)
+
+dfa = VisualDFA(dfa)
+dfa.show_diagram("if")
