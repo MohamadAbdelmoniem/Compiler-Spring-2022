@@ -43,6 +43,12 @@ def lexer():
             allSymbols = allSymbols + 'e'
         elif token == 'end':
             allSymbols = allSymbols + 'n'
+        elif token == ':=':
+            allSymbols = allSymbols + 'o'
+        elif token == ';':
+            allSymbols = allSymbols + 's'
+        elif token[0].isalpha():
+            allSymbols = allSymbols + 'd'
         elif token.isdigit():
             allSymbols = allSymbols + 'z'
         else:
@@ -55,17 +61,20 @@ lexer()
 
 
 dfa2 = VisualDFA(
-    states={"start","if","then","end","stuck","else","integer","identifier", "keyword"},
-    input_symbols={"i","t","e","n","z","y"},
+    states={"start","if","then","end","stuck","else","condition","identifier", "operator","calculate","symbol"},#id=y operator=o
+    input_symbols={"i","t","e","n","z","o","d","s"},
     transitions={
-        "start":{"i":"if","t": "stuck","e" :"stuck","n":"stuck","z":"stuck"}, #start
-        "if":{"i":"stuck","t": "stuck","e" :"stuck","n":"stuck","z":"integer"},#if
-        "then":{"i":"stuck","t":"stuck","e":"else","n":"stuck","z":"stuck"},#then
-        "else":{"i":"stuck","t":"stuck","e":"stuck","n":"end","z":"stuck"},#else
-        "end":{"i":"stuck","t":"stuck","e":"stuck","n":"end","z":"stuck"},#end
-        "stuck":{"i":"stuck","t":"stuck","e":"stuck","n":"stuck","z":"stuck"},#stuck
-        "integer":{"i":"stuck","t":"then","z":"integer","e":"stuck","n":"stuck"}#number condition
-
+        "start":{"i":"if","t": "stuck","e" :"stuck","n":"stuck","z":"stuck","o":"stuck","d":"stuck","s":"stuck"}, #start
+        "if":{"i":"stuck","t": "stuck","e" :"stuck","n":"stuck","z":"condition","o":"stuck","d":"stuck","s":"stuck"},#if
+        "then":{"i":"stuck","t":"stuck","e":"stuck","n":"stuck","z":"stuck","o":"stuck","d":"identifier","s":"stuck"},#then
+        "else":{"i":"if","t":"stuck","e":"stuck","n":"end","z":"stuck","o":"stuck","d":"identifier","s":"stuck"},#else
+        "end":{"i":"stuck","t":"stuck","e":"stuck","n":"end","z":"stuck","o":"stuck","d":"stuck","s":"stuck"},#end
+        "stuck":{"i":"stuck","t":"stuck","e":"stuck","n":"stuck","z":"stuck","o":"stuck","d":"stuck","s":"stuck"},#stuck
+        "condition":{"i":"stuck","t":"then","z":"condition","e":"stuck","n":"stuck","o":"stuck","d":"stuck","s":"stuck"},#number condition
+        "identifier" : {"i":"stuck","t":"stuck","e":"stuck","n":"stuck","z":"stuck","d":"stuck","o":"operator","s":"stuck"},#cant make id = is for now
+        "operator" :  {"i":"stuck","t":"stuck","e":"stuck","n":"stuck","z":"calculate","d":"calculate","o":"stuck","s":"stuck"},
+        "calculate":{"i":"stuck","t":"stuck","e":"stuck","n":"stuck","z":"calculate","d":"stuck","o":"stuck","s":"symbol"},
+        "symbol" : {"i":"stuck","t":"stuck","e":"else","n":"end","z":"stuck","d":"identifier","o":"stuck","s":"stuck"}
     },
     initial_state="start",
     final_states={"end"},
@@ -74,3 +83,4 @@ dfa2 = VisualDFA(
 
 
 dfa2.show_diagram(allSymbols,view=True)
+print(allSymbols)
