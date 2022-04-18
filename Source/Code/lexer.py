@@ -82,5 +82,7 @@ dfa2 = VisualDFA(
 
 
 
-dfa2.show_diagram(allSymbols,view=True)
+
+minimizedDFA = VisualDFA.minify(dfa2)
+minimizedDFA.show_diagram(allSymbols,view=True)
 print(allSymbols)
