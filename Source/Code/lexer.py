@@ -61,7 +61,7 @@ lexer()
 
 
 dfa2 = VisualDFA(
-    states={"start","if","then","end","stuck","else","condition","identifier", "operator","calculate","symbol"},#id=y operator=o
+    states={"start","if","then","end","stuck","else","condition","identifier", "operator","calculate","symbol"},#id=y operator=o symbol=s
     input_symbols={"i","t","e","n","z","o","d","s"},
     transitions={
         "start":{"i":"if","t": "stuck","e" :"stuck","n":"stuck","z":"stuck","o":"stuck","d":"stuck","s":"stuck"}, #start
