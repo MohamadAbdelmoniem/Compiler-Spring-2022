@@ -6,7 +6,7 @@ from visual_automata.fa.dfa import VisualDFA
 
 
 def lexer():
-    input_code = open("/Users/karim/Desktop/Compiler-Spring-2022/Source/Code/input",  # replace by path to input file
+    input_code = open("D:\Ziad\Projects\Compiler-Spring-2022\Source\Code\input",  # replace by path to input file
                       'r')  # open input file in read mode
     allSymbols=""
     # defining tokens
@@ -70,11 +70,11 @@ dfa = DFA(
                   "s": "stuck"},  # start
         "if": {"i": "stuck", "t": "stuck", "e": "stuck", "n": "stuck", "z": "condition", "o": "stuck", "d": "stuck",
                "s": "stuck"},  # if
-        "then": {"i": "stuck", "t": "stuck", "e": "stuck", "n": "stuck", "z": "stuck", "o": "stuck", "d": "identifier",
+        "then": {"i": "if", "t": "stuck", "e": "stuck", "n": "stuck", "z": "stuck", "o": "stuck", "d": "identifier",
                  "s": "stuck"},  # then
         "else": {"i": "if", "t": "stuck", "e": "stuck", "n": "end", "z": "stuck", "o": "stuck", "d": "identifier",
                  "s": "stuck"},  # else
-        "end": {"i": "stuck", "t": "stuck", "e": "stuck", "n": "end", "z": "stuck", "o": "stuck", "d": "stuck",
+        "end": {"i": "if", "t": "stuck", "e": "else", "n": "end", "z": "stuck", "o": "stuck", "d": "stuck",
                 "s": "stuck"},  # end
         "stuck": {"i": "stuck", "t": "stuck", "e": "stuck", "n": "stuck", "z": "stuck", "o": "stuck", "d": "stuck",
                   "s": "stuck"},  # stuck
