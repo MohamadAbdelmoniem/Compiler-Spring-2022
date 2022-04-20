@@ -61,7 +61,7 @@ def lexer():
 allSymbols=lexer()
 
 
-dfa = DFA(
+dfa = VisualDFA(
     states={"start", "if", "then", "end", "stuck", "else", "condition", "identifier", "operator", "calculate",
             "symbol"},  # id=y operator=o symbol=s
     input_symbols={"i", "t", "e", "n", "z", "o", "d", "s"},
@@ -94,7 +94,7 @@ dfa = DFA(
 )
 
 '''minimizedDFA = DFA.minify(dfa)'''
-dfa= VisualDFA(dfa)
+
 dfa.show_diagram(allSymbols, view=True)
 
 
