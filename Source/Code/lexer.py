@@ -95,7 +95,7 @@ dfa = DFA(
 
 '''minimizedDFA = DFA.minify(dfa)'''
 dfa= VisualDFA(dfa)
-dfa.show_diagram(allSymbols)
+dfa.show_diagram(allSymbols, view=True)
 
 
 '''print(allSymbols)'''
