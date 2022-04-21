@@ -1,1 +1,7 @@
-if 1 then if 2 then x :=5; else if 1 then y:=3; else z:=2; end 3
+if 500 then
+new := 80;
+old := new;
+else
+new := 70;
+old := new;
+end
