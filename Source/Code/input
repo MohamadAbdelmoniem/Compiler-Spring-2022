@@ -1,7 +1,4 @@
 if 500 then
-new := 80;
-old := new;
-else
-new := 70;
+50 := 80;
 old := new;
 end
