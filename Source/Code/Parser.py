@@ -55,6 +55,6 @@ def lexer():
     return allSymbols
 
 
-allSymbols=lexer()
+allSymbols = lexer()
 print(allSymbols)
 
