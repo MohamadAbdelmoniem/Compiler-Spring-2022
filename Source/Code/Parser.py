@@ -57,4 +57,3 @@ def lexer():
 
 allSymbols = lexer()
 print(allSymbols)
-
