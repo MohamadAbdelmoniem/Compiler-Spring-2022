@@ -16,13 +16,12 @@ stack=[0]
 
 
 
-def shift(stack,allSymbols,x,cursor):
-
+def shift(stack,allSymbols,x):
+    global cursor
     stack.append(allSymbols[cursor])
     stack.append(x)
     cursor=cursor+1
-
-    parse(stack,allSymbols)
+    print("cursor is " + str(cursor))
 
 
 
@@ -115,49 +114,57 @@ def reduce(stack,rule):
 def notAccepted():
     print("String not accepted")
 
-def action(stack,allSymbols,x,cursor):
+def action(stack,allSymbols,x):
     if (x[0] == 's'):  # if shift function
-        shift(stack, allSymbols, int(x[1],10),cursor)
+
+        shift(stack, allSymbols, int(x[1],10))
         print(stack)
+        parse(stack,allSymbols)
 
     elif (x[0] == 'r'):  # if reduce function
         rule = int(x[1], 10)
         reduce(stack, allSymbols, rule)
+        parse(stack,allSymbols)
         print(stack)
 
 
 def parse(stack,allSymbols):
+    global cursor
     inputToken = allSymbols[cursor]
-    top = stack[len(stack)-1] #stores the top of stack
+    print(inputToken)
+    top = stack[len(stack)-1]
+    print("top equals" + str(top))#stores the top of stack
     if(isinstance(top,int)):  #checks if top of stack is integer
 
         if(inputToken=="if"): #if the input equals if
             x=table.If[top]   #retrieves the parsing table action in string
-            action(stack, allSymbols, x,cursor)
+            action(stack, allSymbols, x)
             print(stack)
 
         elif(inputToken=="number"):
             x = table.number[top]
-            action(stack, allSymbols, x,cursor)
+            print("string"+z)
+            print("number top is " + str(x))
+            action(stack, allSymbols, x)
 
         elif (inputToken == ":="):
             x = table.equal[top]
-            action(stack, allSymbols, x,cursor)
+            action(stack, allSymbols, x)
         elif (inputToken == "identifier"):
             x = table.id[top]
-            action(stack, allSymbols, x,cursor)
+            action(stack, allSymbols, x)
         elif (inputToken == "then"):
             x = table.then[top]
-            action(stack, allSymbols, x,cursor)
+            action(stack, allSymbols, x)
         elif (inputToken == "end"):
             x = table.end[top]
-            action(stack, allSymbols, x,cursor)
+            action(stack, allSymbols, x)
         elif (inputToken == ";"):
             x = table.semicolon[top]
-            action(stack, allSymbols, x,cursor)
+            action(stack, allSymbols, x)
         elif (inputToken == "$"):
             x = table.dollar[top]
-            action(stack, allSymbols, x,cursor)
+            action(stack, allSymbols, x)
 
     else:
         if (inputToken == "stmt-seq"):
