@@ -4,6 +4,8 @@ import ParsingTable as table
 import ParserLexer as lex
 
 global allSymbols
+
+
 allSymbols = lex.lexer()
 print(allSymbols)
 global cursor
@@ -27,88 +29,129 @@ def shift(stack,allSymbols,x):
 
 
 def reduce(stack,rule):
+    i=len(stack)-1
     if(rule == 1):
 
-        for i in reversed(stack):
-            if(i>0 and stack[i]=="statement" and stack[i-1]=="stmt-seq" ):
+        while i>=0:
+            if(i>0 and stack[i-1]=="statement" and stack[i-3]=="stmt-seq" ):
                 del stack[i]
                 del stack[i-1]
+                del stack[i - 2]
+                del stack[i - 3]
                 stack.append("stmt-seq")
+                y = table.stmtseq[stack[len(stack) - 2]]
+                stack.append(y)
                 return
+            i-=1
         notAccepted()
 
     elif (rule == 2):
 
-        for i in reversed(stack):
-            if (stack[i] == "statement"):
+        while i>=0:
+            if (stack[i-1] == "statement"):
                 del stack[i]
+                del stack[i - 1]
                 stack.append("stmt-seq")
+                y = table.stmtseq[stack[len(stack) - 2]]
+                stack.append(y)
                 return
+            i -= 1
         notAccepted()
 
     elif (rule == 3):
 
-        for i in reversed(stack):
-            if (stack[i] == "if-stmt"):
+        while i>=0:
+            if (stack[i-1] == "if-stmt"):
                 del stack[i]
+                del stack[i - 1]
                 stack.append("statement")
+                y = table.statement[stack[len(stack) - 2]]
+                stack.append(y)
                 return
+            i -= 1
         notAccepted()
 
     elif(rule == 4):
 
-        for i in reversed(stack):
-            if (stack[i] == "assign-stmt"):
+        while i>=0:
+            if (stack[i-1] == "assign-stmt"):
                 del stack[i]
+                del stack[i - 1]
                 stack.append("statement")
+                y = table.statement[stack[len(stack) - 2]]
+                stack.append(y)
                 return
+            i -= 1
         notAccepted()
 
     elif (rule == 5):
 
-        for i in reversed(stack):
-            if (i>3 and stack[i] == "end" and stack[i-1]=="stmt-seq" and stack[i-2]=="then"
-                    and stack[i-3]=="number" and stack[i-4]=="if"):
+        while i>=0:
+            if (i>8 and stack[i-1] == "end" and stack[i-3]=="stmt-seq" and stack[i-5]=="then"
+                    and stack[i-7]=="number" and stack[i-9]=="if"):
 
                 del stack[i]
                 del stack[i-1]
                 del stack[i-2]
                 del stack[i-3]
                 del stack[i-4]
+                del stack[i - 5]
+                del stack[i - 6]
+                del stack[i - 7]
+                del stack[i - 8]
+                del stack[i - 9]
                 stack.append("if-stmt")
+                y = table.ifstmt[stack[len(stack) - 2]]
+                stack.append(y)
                 return
+            i -= 1
         notAccepted()
 
 
     elif (rule == 6):
 
-        for i in reversed(stack):
-            if (i>2 and stack[i] == ";" and stack[i-1]=="factor" and stack[i-2]==":="
-                    and stack[i-3]=="identifier"):
+        while i>=0:
+            if (i>6 and stack[i-1] == ";" and stack[i-3]=="factor" and stack[i-5]==":="
+                    and stack[i-7]=="identifier"):
                 del stack[i]
                 del stack[i - 1]
                 del stack[i - 2]
                 del stack[i - 3]
+                del stack[i - 4]
+                del stack[i - 5]
+                del stack[i - 6]
+                del stack[i - 7]
                 stack.append("assign-stmt")
+                y = table.assignstmt[stack[len(stack) - 2]]
+                stack.append(y)
                 return
+            i -= 1
         notAccepted()
 
     elif (rule == 7):
 
-        for i in reversed(stack):
-            if (stack[i] == "identifier"):
+        while i>=0:
+            if (stack[i-1] == "identifier"):
                 del stack[i]
+                del stack[i-1]
                 stack.append("factor")
+                y=table.factor[stack[len(stack)-2]]
+                stack.append(y)
                 return
+            i -= 1
         notAccepted()
 
     elif (rule == 8):
 
-        for i in reversed(stack):
-            if (stack[i] == "number"):
+        while i>=0:
+            if (stack[i-1] == "number"):
                 del stack[i]
+                del stack[i-1]
                 stack.append("factor")
+                y = table.factor[stack[len(stack) - 2]]
+                stack.append(y)
                 return
+            i -= 1
         notAccepted()
 
 def notAccepted():
@@ -116,16 +159,27 @@ def notAccepted():
 
 def action(stack,allSymbols,x):
     if (x[0] == 's'):  # if shift function
-
-        shift(stack, allSymbols, int(x[1],10))
+        split = re.split('(\d+)', x)
+        x = split[1]
+        x=int(x,10)
+        print("the int value is "+ str(x))
+        shift(stack, allSymbols, x)
         print(stack)
         parse(stack,allSymbols)
 
     elif (x[0] == 'r'):  # if reduce function
-        rule = int(x[1], 10)
-        reduce(stack, allSymbols, rule)
-        parse(stack,allSymbols)
+        split = re.split('(\d+)', x)
+        x = split[1]
+        rule = int(x, 10)
+        reduce(stack, rule)
         print(stack)
+        parse(stack,allSymbols)
+    elif(x=="accept"):
+        stack.append("$")
+        print(stack)
+        print("String is accepted")
+        print("Congratulations!")
+
 
 
 def parse(stack,allSymbols):
@@ -133,17 +187,16 @@ def parse(stack,allSymbols):
     inputToken = allSymbols[cursor]
     print(inputToken)
     top = stack[len(stack)-1]
-    print("top equals" + str(top))#stores the top of stack
+    print("top equals " + str(top))#stores the top of stack
     if(isinstance(top,int)):  #checks if top of stack is integer
-
+        print("iteration")
         if(inputToken=="if"): #if the input equals if
             x=table.If[top]   #retrieves the parsing table action in string
             action(stack, allSymbols, x)
-            print(stack)
+
 
         elif(inputToken=="number"):
             x = table.number[top]
-            print("string"+z)
             print("number top is " + str(x))
             action(stack, allSymbols, x)
 
@@ -184,4 +237,4 @@ def parse(stack,allSymbols):
             stack.append(x[1])
 
 parse(stack,allSymbols)
-print(stack)
+
