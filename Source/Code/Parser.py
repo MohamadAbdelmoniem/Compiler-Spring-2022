@@ -11,7 +11,7 @@ print(allSymbols)
 global cursor
 cursor = 0
 global accepted
-accepted = false
+accepted = False
 global stack
 stack=[0]
 
@@ -178,7 +178,7 @@ def action(stack,allSymbols,x):
     elif(x=="accept"):
         stack.append("$")
         print(stack)
-        accepted = true
+        accepted = True
         print("String is accepted")
         print("Congratulations!")
 
