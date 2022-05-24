@@ -87,7 +87,7 @@ def shift(stack,allsymbols,cursor):
     stack.append(allsymbols[cursor])
     cursor=cursor+1
 
-def reduce(stack,allsymbols,rule):
+def reduce(stack,rule):
     if(rule == 1):
 
         for i in reversed(stack):
