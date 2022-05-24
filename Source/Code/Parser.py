@@ -1,5 +1,8 @@
 import nltk as nltk
 import re
+import ParsingTable as table
+
+stack=[0]
 
 
 def lexer():
@@ -52,8 +55,111 @@ def lexer():
             allSymbols = allSymbols + 'x'  # not a valid lexeme
 
     input_code.close()
-    return allSymbols
+    return allSymbols + "$"
 
 
 allSymbols = lexer()
 print(allSymbols)
+
+cursor = 0
+
+def parse(stack,allsymbols):
+    inputToken=allSymbols[cursor]
+    top= stack[len(stack)-1]
+    if(isinstance(top,int)):  #checks if top of stack is integer
+
+        if(inputToken=="if"): #if the input equals if
+            x=table.If[top]   #retrieves the parsing table action in string
+
+            if(x[0]=='s'):    #if shift function
+                shift(stack,allsymbols,cursor)
+
+            elif(x[0]=='r'):  #if reduce function
+                rule = int(x[1],10)
+                reduce(stack,allsymbols,rule)
+
+
+
+
+
+
+def shift(stack,allsymbols,cursor):
+    stack.append(allsymbols[cursor])
+    cursor=cursor+1
+
+def reduce(stack,allsymbols,rule):
+    if(rule == 1):
+
+        for i in reversed(stack):
+            if(i>0 and stack[i]=="statement" and stack[i-1]=="stmt-seq" ):
+                del stack[i]
+                del stack[i-1]
+                stack.append("stmt-seq")
+                return
+
+    elif (rule == 2):
+
+        for i in reversed(stack):
+            if (stack[i] == "statement"):
+                del stack[i]
+                stack.append("stmt-seq")
+                return
+
+    elif (rule == 3):
+
+        for i in reversed(stack):
+            if (stack[i] == "if-stmt"):
+                del stack[i]
+                stack.append("statement")
+                return
+
+    elif(rule == 4):
+
+        for i in reversed(stack):
+            if (stack[i] == "assign-stmt"):
+                del stack[i]
+                stack.append("statement")
+                return
+
+    elif (rule == 5):
+
+        for i in reversed(stack):
+            if (i>3 and stack[i] == "end" and stack[i-1]=="stmt-seq" and stack[i-2]=="then"
+                    and stack[i-3]=="number" and stack[i-4]=="if"):
+
+                del stack[i]
+                del stack[i-1]
+                del stack[i-2]
+                del stack[i-3]
+                del stack[i-4]
+                stack.append("if-stmt")
+                return
+
+
+    elif (rule == 6):
+
+        for i in reversed(stack):
+            if (i>2 and stack[i] == ";" and stack[i-1]=="factor" and stack[i-2]==":="
+                    and stack[i-3]=="identifier"):
+                del stack[i]
+                del stack[i - 1]
+                del stack[i - 2]
+                del stack[i - 3]
+                stack.append("assign-stmt")
+                return
+
+    elif (rule == 7):
+
+        for i in reversed(stack):
+            if (stack[i] == "identifier"):
+                del stack[i]
+                stack.append("factor")
+                return
+
+    if (rule == 8):
+
+        for i in reversed(stack):
+            if (stack[i] == "number"):
+                del stack[i]
+                stack.append("factor")
+                return
