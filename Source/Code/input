@@ -1,4 +1,1 @@
-if 500 then
-x1 := 80;
-old := new;
-end
+if 50 then x := 5 ; end
