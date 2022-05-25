@@ -1,11 +1,17 @@
+import networkx as nx
 import nltk as nltk
+from graphviz import Digraph
+import matplotlib.pyplot as plt
+from nltk.draw.tree import draw_trees
 import re
 import ParsingTable as table
 import ParserLexer as lex
-
+import Tree as tree
+global s
+s=""
 global allSymbols
 
-
+parseTree = []
 allSymbols = lex.lexer()
 print(allSymbols)
 global cursor
@@ -22,6 +28,7 @@ stack=[0]
 def shift(stack,allSymbols,x):
     global cursor
     stack.append(allSymbols[cursor])
+
     stack.append(x)
     cursor=cursor+1
     print("cursor is " + str(cursor))
@@ -30,11 +37,14 @@ def shift(stack,allSymbols,x):
 
 
 def reduce(stack,rule):
+    global s
+
     i=len(stack)-1
     if(rule == 1):
 
         while i>=0:
             if(i>0 and stack[i-1]=="statement" and stack[i-3]=="stmt-seq" ):
+                s = "stmt-seq " + s +")"
                 del stack[i]
                 del stack[i-1]
                 del stack[i - 2]
@@ -50,6 +60,7 @@ def reduce(stack,rule):
 
         while i>=0:
             if (stack[i-1] == "statement"):
+                s= "(stmt-seq "+s+ ")"
                 del stack[i]
                 del stack[i - 1]
                 stack.append("stmt-seq")
@@ -63,6 +74,7 @@ def reduce(stack,rule):
 
         while i>=0:
             if (stack[i-1] == "if-stmt"):
+                s = "(statement " + s +")"
                 del stack[i]
                 del stack[i - 1]
                 stack.append("statement")
@@ -76,6 +88,7 @@ def reduce(stack,rule):
 
         while i>=0:
             if (stack[i-1] == "assign-stmt"):
+                s="(statement " + s +")"
                 del stack[i]
                 del stack[i - 1]
                 stack.append("statement")
@@ -90,7 +103,7 @@ def reduce(stack,rule):
         while i>=0:
             if (i>8 and stack[i-1] == "end" and stack[i-3]=="stmt-seq" and stack[i-5]=="then"
                     and stack[i-7]=="number" and stack[i-9]=="if"):
-
+                s = "(if-stmt if number then " + s + " end)"
                 del stack[i]
                 del stack[i-1]
                 del stack[i-2]
@@ -114,6 +127,7 @@ def reduce(stack,rule):
         while i>=0:
             if (i>6 and stack[i-1] == ";" and stack[i-3]=="factor" and stack[i-5]==":="
                     and stack[i-7]=="identifier"):
+                s=" (assign-stmt ID := " +s+" ;)"
                 del stack[i]
                 del stack[i - 1]
                 del stack[i - 2]
@@ -133,6 +147,7 @@ def reduce(stack,rule):
 
         while i>=0:
             if (stack[i-1] == "identifier"):
+                s = "(factor "+ s +")"
                 del stack[i]
                 del stack[i-1]
                 stack.append("factor")
@@ -146,6 +161,8 @@ def reduce(stack,rule):
 
         while i>=0:
             if (stack[i-1] == "number"):
+                s="(factor number)"
+
                 del stack[i]
                 del stack[i-1]
                 stack.append("factor")
@@ -163,9 +180,9 @@ def action(stack,allSymbols,x):
         split = re.split('(\d+)', x)
         x = split[1]
         x=int(x,10)
-        print("the int value is "+ str(x))
+
         shift(stack, allSymbols, x)
-        print(stack)
+
         parse(stack,allSymbols)
 
     elif (x[0] == 'r'):  # if reduce function
@@ -238,4 +255,11 @@ def parse(stack,allSymbols):
             stack.append(x[1])
 
 parse(stack,allSymbols)
+treeS=nltk.Tree.fromstring(s)
+draw_trees(treeS)
+
+
+#pos = nx.spring_layout(parseTree)
+#nx.draw_networkx_nodes(parseTree, pos, cmap=plt.get_cmap('jet'), node_size = 500)
+#plt.show()
 
