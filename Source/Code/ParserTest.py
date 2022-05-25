@@ -88,7 +88,7 @@ class Parser:
 
             while i >= 0:
                 if i > 0 and self.stack[i - 1] == "statement" and self.stack[i - 3] == "stmt-seq":
-                    self.s = "stmt-seq " + self.s + ")"
+                    self.s = "(stmt-seq " + self.s + ")"
                     del self.stack[i]
                     del self.stack[i - 1]
                     del self.stack[i - 2]
