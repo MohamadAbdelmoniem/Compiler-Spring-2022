@@ -11,7 +11,7 @@ def lexer(input_code):
     numbers = r'(\d+)'
     identifier = '[a-z]'
     tokens = []
-    # tokenizing the input file
+
     tokens.extend(nltk.wordpunct_tokenize(input_code))
     print(tokens)
     # printing tokens
