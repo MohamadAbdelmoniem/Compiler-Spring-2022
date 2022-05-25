@@ -260,6 +260,7 @@ if(accepted):
     draw_trees(treeS)
 
 
+
 #pos = nx.spring_layout(parseTree)
 #nx.draw_networkx_nodes(parseTree, pos, cmap=plt.get_cmap('jet'), node_size = 500)
 #plt.show()
