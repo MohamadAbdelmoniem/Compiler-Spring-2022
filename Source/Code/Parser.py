@@ -14,7 +14,6 @@ global accepted
 global stack
 s=""
 
-
 parseTree = []
 input =""
 allSymbols = lex.lexer(input)
