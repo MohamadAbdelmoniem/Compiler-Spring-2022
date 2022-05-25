@@ -1,7 +1,1 @@
-if 500 then
-new := 80;
-old := new;
-else
-new := 70;
-old := new;
-end
+if 50 then  x := 5 ; z := 10 ;  end
