@@ -28,6 +28,7 @@ class WelcomeScreen(QMainWindow):
 
     def draw_parseTree(self):
         parser.p.reset_parser()
+        treeS = None
         parser.p.set_input(self.InputTextBox.toPlainText())
         parser.p.lexer()
         print(f"here {parser.p.language} ")
