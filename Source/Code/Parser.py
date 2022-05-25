@@ -6,7 +6,7 @@ from nltk.draw.tree import draw_trees
 import re
 import ParsingTable as table
 import ParserLexer as lex
-import Tree as tree
+
 global s
 s=""
 global allSymbols
@@ -195,6 +195,7 @@ def action(stack,allSymbols,x):
     elif(x=="accept"):
         stack.append("$")
         print(stack)
+        global accepted
         accepted = True
         print("String is accepted")
         print("Congratulations!")
@@ -258,6 +259,7 @@ parse(stack,allSymbols)
 treeS=nltk.Tree.fromstring(s)
 if(accepted):
     draw_trees(treeS)
+
 
 
 #pos = nx.spring_layout(parseTree)
