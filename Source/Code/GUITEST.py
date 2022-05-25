@@ -34,7 +34,7 @@ class WelcomeScreen(QMainWindow):
         print(f"here {parser.p.language} ")
         parser.p.parse()
         treeS = nltk.Tree.fromstring(parser.p.s)
-        if parser.p.accepted==True:
+        if parser.p.accepted:
             parser.draw_trees(treeS)
 
     def showParseTableImageScreen(self):
