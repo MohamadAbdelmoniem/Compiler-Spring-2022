@@ -17,7 +17,9 @@ class WelcomeScreen(QMainWindow):
         self.ShowParseTableButton.clicked.connect(self.showParseTableImageScreen)
 
     def addCode(self):
+        parser.p.reset_parser()
         parser.p.set_input(self.InputTextBox.toPlainText())
+        print(parser.p.input)
         lexer.l.set_input(self.InputTextBox.toPlainText())
 
     def draw_dfa(self):
@@ -25,11 +27,15 @@ class WelcomeScreen(QMainWindow):
         lexer.l.draw_dfa()
 
     def draw_parseTree(self):
+        parser.p.set_input(self.InputTextBox.toPlainText())
         parser.p.lexer()
+        print(f"here {parser.p.language} ")
         parser.p.parse()
         treeS = nltk.Tree.fromstring(parser.p.s)
-        if parser.p.accepted:
+        if parser.p.accepted==True:
+            print("here")
             parser.draw_trees(treeS)
+        print("here")
 
     def showParseTableImageScreen(self):
         Screen2 = ParseTableScreen()

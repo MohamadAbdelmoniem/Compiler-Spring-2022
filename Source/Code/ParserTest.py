@@ -7,7 +7,15 @@ import ParsingTable as table
 class Parser:
 
     def __init__(self):
-        self.input = "if 50 then if 5 then x := 55 ; end end"
+        self.input = None
+        self.s = ''
+        self.cursor = 0
+        self.accepted = False
+        self.stack = [0]
+        self.language = []
+
+    def reset_parser(self):
+        self.input = None
         self.s = ''
         self.cursor = 0
         self.accepted = False
@@ -18,7 +26,7 @@ class Parser:
         self.input = text
 
     def lexer(self):
-
+        self.accepted = False
         # defining tokens
         operators = "(:=)"
         keywords = "if|then|else|end"
