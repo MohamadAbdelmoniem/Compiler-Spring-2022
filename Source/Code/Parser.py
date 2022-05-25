@@ -1,24 +1,25 @@
-import networkx as nx
+
 import nltk as nltk
-from graphviz import Digraph
-import matplotlib.pyplot as plt
-from nltk.draw.tree import draw_trees
 import re
+
+from nltk.draw.tree import draw_trees
+
 import ParsingTable as table
 import ParserLexer as lex
 
 global s
-s=""
 global allSymbols
+global cursor
+global accepted
+global stack
+s=""
+
 
 parseTree = []
-allSymbols = lex.lexer()
-print(allSymbols)
-global cursor
+input =""
+allSymbols = lex.lexer(input)
 cursor = 0
-global accepted
 accepted = False
-global stack
 stack=[0]
 
 
@@ -196,6 +197,7 @@ def action(stack,allSymbols,x):
         stack.append("$")
         print(stack)
         global accepted
+
         accepted = True
         print("String is accepted")
         print("Congratulations!")
