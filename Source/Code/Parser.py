@@ -7,20 +7,21 @@ import re
 import ParsingTable as table
 import ParserLexer as lex
 
-global s
-s=""
 global allSymbols
+global s
+global cursor
+global accepted
+global stack
 
+s=""
 input=""
-
 parseTree = []
+
 allSymbols = lex.lexer(input)
 print(allSymbols)
-global cursor
+
 cursor = 0
-global accepted
 accepted = False
-global stack
 stack=[0]
 
 
