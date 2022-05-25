@@ -1,1 +1,1 @@
-if 50 then  x := 5 ; z := 10 ;  end
+if 50 then if 5 then x := 55 ; end end
