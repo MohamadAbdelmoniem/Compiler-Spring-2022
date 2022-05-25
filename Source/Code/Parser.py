@@ -10,8 +10,11 @@ import ParserLexer as lex
 global s
 s=""
 global allSymbols
+
+input=""
+
 parseTree = []
-allSymbols = lex.lexer()
+allSymbols = lex.lexer(input)
 print(allSymbols)
 global cursor
 cursor = 0

@@ -2,9 +2,8 @@ import nltk as nltk
 import re
 
 
-def lexer():
-    input_code = open("D:\Ziad\Projects\Compiler-Spring-2022\Source\Code\input",  # replace by path to input file
-                      'r')  # open input file in read mode
+def lexer(input_code):
+
     language = []
     # defining tokens
     operators = "(:=)"
@@ -14,10 +13,7 @@ def lexer():
     identifier = '[a-z]'
     tokens = []
 
-    lines = input_code.readlines()
-    print(lines)
-    for line in lines:
-        tokens.extend(nltk.wordpunct_tokenize(line))
+    tokens.extend(nltk.wordpunct_tokenize(input_code))
     print(tokens)
     # printing tokens
     for token in tokens:
@@ -60,6 +56,5 @@ def lexer():
         else:
             language.append('x')  # not a valid lexeme
 
-    input_code.close()
     language.append('$')
     return language
