@@ -256,7 +256,8 @@ def parse(stack,allSymbols):
 
 parse(stack,allSymbols)
 treeS=nltk.Tree.fromstring(s)
-draw_trees(treeS)
+if(accepted):
+    draw_trees(treeS)
 
 
 #pos = nx.spring_layout(parseTree)
