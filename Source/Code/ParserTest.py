@@ -10,6 +10,7 @@ class Parser:
         self.input = "if 50 then if 5 then x := 55 ; end "
         self.s = ''
         self.s2 = ""
+        self.double = 0
         self.cursor = 0
         self.accepted = False
         self.stack = [0]
@@ -141,7 +142,7 @@ class Parser:
                 if self.stack[i - 1] == "assign-stmt":
 
                     if self.language[self.cursor] != "if" and self.language[self.cursor] != "identifier":
-                        self.s = "(stmt-seq (statement " + self.s + "))"
+                        self.s = "(statement " + self.s + ")"
                         del self.stack[i]
                         del self.stack[i - 1]
                         self.stack.append("statement")
@@ -150,7 +151,7 @@ class Parser:
                         return
                     else:
                         double += 1
-                        self.s = "(stmt-seq " + self.s + ")"  # bug fix trial
+                        self.s1 = "(stmt-seq (statement " + self.s2 + "))"  # bug fix trial
                         del self.stack[i]
                         del self.stack[i - 1]
                         self.stack.append("statement")
