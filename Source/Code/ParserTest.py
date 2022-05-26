@@ -9,6 +9,7 @@ class Parser:
     def __init__(self):
         self.input = "if 50 then if 5 then x := 55 ; end "
         self.s = ''
+        self.s2 = ""
         self.cursor = 0
         self.accepted = False
         self.stack = [0]
@@ -19,9 +20,8 @@ class Parser:
         self.input = text
         self.cursor = 0
         self.stack = [0]
-        self.inputToken=self.lexer()
+        self.inputToken = self.lexer()
         self.language = []
-
 
     def lexer(self):
 
@@ -88,12 +88,12 @@ class Parser:
         print("cursor is " + str(self.cursor))
 
     def reduce(self, rule):
-
+        double = 0
         i = len(self.stack) - 1
         if rule == 1:
 
             while i >= 0:
-                if i > 0 and self.stack[i - 1] == "statement" and self.stack[i - 3] == "stmt-seq":
+                if i > 2 and self.stack[i - 1] == "statement" and self.stack[i - 3] == "stmt-seq":
                     self.s = "(stmt-seq " + self.s + " statement)"
                     del self.stack[i]
                     del self.stack[i - 1]
@@ -103,6 +103,7 @@ class Parser:
                     y = table.stmtseq[self.stack[len(self.stack) - 2]]
                     self.stack.append(y)
                     return
+
                 i -= 1
             self.notAccepted()
 
@@ -138,13 +139,24 @@ class Parser:
 
             while i >= 0:
                 if self.stack[i - 1] == "assign-stmt":
-                    self.s = "(statement " + self.s + ")"
-                    del self.stack[i]
-                    del self.stack[i - 1]
-                    self.stack.append("statement")
-                    y = table.statement[self.stack[len(self.stack) - 2]]
-                    self.stack.append(y)
-                    return
+
+                    if self.language[self.cursor] != "if" and self.language[self.cursor] != "identifier":
+                        self.s = "(stmt-seq (statement " + self.s + "))"
+                        del self.stack[i]
+                        del self.stack[i - 1]
+                        self.stack.append("statement")
+                        y = table.statement[self.stack[len(self.stack) - 2]]
+                        self.stack.append(y)
+                        return
+                    else:
+                        double += 1
+                        self.s = "(stmt-seq " + self.s + ")"  # bug fix trial
+                        del self.stack[i]
+                        del self.stack[i - 1]
+                        self.stack.append("statement")
+                        y = table.statement[self.stack[len(self.stack) - 2]]
+                        self.stack.append(y)
+                        return
                 i -= 1
             self.notAccepted()
 
@@ -152,8 +164,7 @@ class Parser:
 
             while i >= 0:
                 if (i > 8 and self.stack[i - 1] == "end" and self.stack[i - 3] == "stmt-seq" and self.stack[
-                    i - 5] == "then"
-                        and self.stack[i - 7] == "number" and self.stack[i - 9] == "if"):
+                    i - 5] == "then" and self.stack[i - 7] == "number" and self.stack[i - 9] == "if"):
                     self.s = "(if-stmt if number then " + self.s + " end)"
                     del self.stack[i]
                     del self.stack[i - 1]
@@ -176,7 +187,10 @@ class Parser:
             while i >= 0:
                 if (i > 6 and self.stack[i - 1] == ";" and self.stack[i - 3] == "factor" and self.stack[i - 5] == ":="
                         and self.stack[i - 7] == "identifier"):
-                    self.s = " (assign-stmt ID := " + self.s + " ;)"
+                    if double<1:
+                        self.s = " (assign-stmt ID := " + self.s + " ;)"
+                    else:
+                        self.s2 = " (assign-stmt ID := " + self.s2 + " ;)"
                     del self.stack[i]
                     del self.stack[i - 1]
                     del self.stack[i - 2]
@@ -210,14 +224,18 @@ class Parser:
 
             while i >= 0:
                 if self.stack[i - 1] == "number":
-                    self.s = "(factor number)"
+                   if double<1:
+                        self.s = "(factor number)"
+                   else:
+                       self.s2 = "(factor number)"
+                del self.stack[i]
+                del self.stack[i - 1]
+                self.stack.append("factor")
+                y = table.factor[self.stack[len(self.stack) - 2]]
+                self.stack.append(y)
+                return
 
-                    del self.stack[i]
-                    del self.stack[i - 1]
-                    self.stack.append("factor")
-                    y = table.factor[self.stack[len(self.stack) - 2]]
-                    self.stack.append(y)
-                    return
+
                 i -= 1
             self.notAccepted()
 
@@ -299,8 +317,11 @@ class Parser:
             elif self.inputToken == "factor":
                 x = table.factor[top - 1]
                 self.stack.append(x[1])
+        print("Tree string is " + self.s)
+
 
 p = Parser()
+
 '''p.lexer()
 print(f"here {p.language} ")
 p.parse()
