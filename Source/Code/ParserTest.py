@@ -11,6 +11,7 @@ class Parser:
         self.s = ''
         self.s2 = ""
         self.doubleAssign = 0
+        self.doubleIf =0
         self.cursor = 0
         self.accepted = False
         self.stack = [0]
@@ -23,6 +24,7 @@ class Parser:
         self.s2=""
         self.cursor = 0
         self.doubleAssign=0
+        self.doubleIf =0
         self.stack = [0]
         self.inputToken=[]
         self.language = []
@@ -99,13 +101,14 @@ class Parser:
         print("cursor is " + str(self.cursor))
 
     def reduce(self, rule):
-        doubleAssign = 0
+        self.doubleAssign = 0
+        self.doubleIf = 0
         i = len(self.stack) - 1
         if rule == 1:
 
             while i >= 0:
                 if i > 2 and self.stack[i - 1] == "statement" and self.stack[i - 3] == "stmt-seq":
-                    if doubleAssign < 1 :
+                    if self.doubleAssign < 1 and self.doubleIf==0:
                         self.s = "(stmt-seq " + self.s + " statement)"
                     else:
                         self.s = "(stmt-seq " + self.s2 + ")"
@@ -164,11 +167,15 @@ class Parser:
                         self.stack.append(y)
                         return
                     else:
-                        doubleAssign += 1
+                        self.doubleAssign += 1
                         self.s = " (stmt-seq (stmt-seq (statement "+self.s+"))(statement "+self.s+") )"  # bug fix trial
                         del self.stack[i]
                         del self.stack[i - 1]
-                        self.cursor+=4
+                        if self.language[self.cursor] == "if":
+                            self.cursor+=8
+                        else:
+                            self.cursor+=4
+
                         self.stack.append("stmt-seq")
                         y = table.stmtseq[self.stack[len(self.stack) - 2]]
                         self.stack.append(y)
