@@ -300,7 +300,6 @@ class Parser:
                 x = table.factor[top - 1]
                 self.stack.append(x[1])
 
-
 p = Parser()
 '''p.lexer()
 print(f"here {p.language} ")
