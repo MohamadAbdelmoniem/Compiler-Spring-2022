@@ -51,7 +51,7 @@ end[15] = "s16"
 end[16] = "r5"
 
 semicolon[9] = "r8"
-semicolon[10] = "r8"
+semicolon[10] = "r7"
 semicolon[11] = "s12"
 
 dollar[3] = "accept"

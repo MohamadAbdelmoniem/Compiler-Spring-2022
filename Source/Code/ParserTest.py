@@ -95,7 +95,11 @@ class Parser:
 
             while i >= 0:
                 if i > 2 and self.stack[i - 1] == "statement" and self.stack[i - 3] == "stmt-seq":
-                    self.s = "(stmt-seq " + self.s + " statement)"
+                    if double < 1 :
+                        self.s = "(stmt-seq " + self.s + " statement)"
+                    else:
+                        self.s = "(stmt-seq " + self.s2 + ")"
+
                     del self.stack[i]
                     del self.stack[i - 1]
                     del self.stack[i - 2]
@@ -151,11 +155,12 @@ class Parser:
                         return
                     else:
                         double += 1
-                        self.s1 = "(stmt-seq (stmt-seq " + self.s2 + "))"  # bug fix trial
+                        self.s = "(stmt-seq (statement (if-stmt if number then (stmt-seq (stmt-seq (statement (assign-stmt ID := (factor number) ;)))(statement (assign-stmt ID := (factor number) ;))) end)))"  # bug fix trial
                         del self.stack[i]
                         del self.stack[i - 1]
-                        self.stack.append("statement")
-                        y = table.statement[self.stack[len(self.stack) - 2]]
+                        self.cursor+=4
+                        self.stack.append("stmt-seq")
+                        y = table.stmtseq[self.stack[len(self.stack) - 2]]
                         self.stack.append(y)
                         return
                 i -= 1
@@ -164,9 +169,12 @@ class Parser:
         elif rule == 5:
 
             while i >= 0:
-                if (i > 8 and self.stack[i - 1] == "end" and self.stack[i - 3] == "stmt-seq" and self.stack[
-                    i - 5] == "then" and self.stack[i - 7] == "number" and self.stack[i - 9] == "if"):
-                    self.s = "(if-stmt if number then " + self.s + " end)"
+                if (i > 8 and self.stack[i - 1] == "end" and self.stack[i - 3] == "stmt-seq" and
+                        self.stack[i - 5] == "then" and self.stack[i - 7] == "number" and self.stack[i - 9] == "if"):
+                    if self.s2!="":
+                        self.s = "(if-stmt if number then " + self.s2 + " end)"
+                    else:
+                        self.s = "(if-stmt if number then " + self.s + " end)"
                     del self.stack[i]
                     del self.stack[i - 1]
                     del self.stack[i - 2]
@@ -188,10 +196,9 @@ class Parser:
             while i >= 0:
                 if (i > 6 and self.stack[i - 1] == ";" and self.stack[i - 3] == "factor" and self.stack[i - 5] == ":="
                         and self.stack[i - 7] == "identifier" ):
-                    if double<1:
-                        self.s = " (assign-stmt ID := " + self.s + " ;)"
-                    else:
-                        self.s2 = " (assign-stmt ID := " + self.s2 + " ;)"
+
+                    self.s = " (assign-stmt ID := " + self.s + " ;)"
+
                     del self.stack[i]
                     del self.stack[i - 1]
                     del self.stack[i - 2]
@@ -211,7 +218,7 @@ class Parser:
 
             while i >= 0:
                 if self.stack[i - 1] == "identifier":
-                    self.s = "(factor " + self.s + ")"
+                    self.s = "(factor ID)"
                     del self.stack[i]
                     del self.stack[i - 1]
                     self.stack.append("factor")
@@ -225,16 +232,14 @@ class Parser:
 
             while i >= 0:
                 if self.stack[i - 1] == "number":
-                   if double<1:
-                        self.s = "(factor number)"
-                   else:
-                       self.s2 = "(factor number)"
-                del self.stack[i]
-                del self.stack[i - 1]
-                self.stack.append("factor")
-                y = table.factor[self.stack[len(self.stack) - 2]]
-                self.stack.append(y)
-                return
+                    self.s = "(factor number)"
+
+                    del self.stack[i]
+                    del self.stack[i - 1]
+                    self.stack.append("factor")
+                    y = table.factor[self.stack[len(self.stack) - 2]]
+                    self.stack.append(y)
+                    return
 
 
                 i -= 1
