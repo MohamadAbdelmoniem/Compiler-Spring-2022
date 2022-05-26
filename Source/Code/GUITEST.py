@@ -3,8 +3,8 @@ import nltk
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
 from PyQt5.uic import loadUi
-from Source.Code import ParserTest as parser
-from Source.Code import lexer as lexer
+import ParserTest as parser
+import lexer as lexer
 
 
 class WelcomeScreen(QMainWindow):
@@ -17,21 +17,16 @@ class WelcomeScreen(QMainWindow):
         self.ShowParseTableButton.clicked.connect(self.showParseTableImageScreen)
 
     def addCode(self):
-        parser.p.reset_parser()
-        parser.p.set_input(self.InputTextBox.toPlainText())
-        print(parser.p.input)
         lexer.l.set_input(self.InputTextBox.toPlainText())
+        parser.p.set_input(self.InputTextBox.toPlainText())
+
 
     def draw_dfa(self):
         lexer.l.lexer()
         lexer.l.draw_dfa()
 
     def draw_parseTree(self):
-        parser.p.reset_parser()
-        treeS = None
-        parser.p.set_input(self.InputTextBox.toPlainText())
         parser.p.lexer()
-        print(f"here {parser.p.language} ")
         parser.p.parse()
         treeS = nltk.Tree.fromstring(parser.p.s)
         if parser.p.accepted:
