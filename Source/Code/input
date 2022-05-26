@@ -1,0 +1,2 @@
+(statement (assign-stmt ID := (factor number) ;)))
+(statement (if-stmt if number then (stmt-seq (assign-stmt ID := (factor number) ;))))
