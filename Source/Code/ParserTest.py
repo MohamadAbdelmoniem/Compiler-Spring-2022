@@ -11,28 +11,25 @@ class Parser:
         self.s = ''
         self.s2 = ""
         self.doubleAssign = 0
-        self.doubleIf =0
+        self.doubleIf = 0
         self.cursor = 0
         self.accepted = False
         self.stack = [0]
         self.language = []
 
     def set_input(self, text):
-        self.input=""
-        self.s=""
-        self.accepted=False
-        self.s2=""
+        self.input = ""
+        self.s = ""
+        self.accepted = False
+        self.s2 = ""
         self.cursor = 0
-        self.doubleAssign=0
-        self.doubleIf =0
+        self.doubleAssign = 0
+        self.doubleIf = 0
         self.stack = [0]
-        self.inputToken=[]
+        self.inputToken = []
         self.language = []
         self.input = text
         self.inputToken = self.lexer()
-
-
-
 
     def lexer(self):
 
@@ -108,7 +105,7 @@ class Parser:
 
             while i >= 0:
                 if i > 2 and self.stack[i - 1] == "statement" and self.stack[i - 3] == "stmt-seq":
-                    if self.doubleAssign < 1 and self.doubleIf==0:
+                    if self.doubleAssign < 1 and self.doubleIf == 0:
                         self.s = "(stmt-seq " + self.s + " statement)"
                     else:
                         self.s = "(stmt-seq " + self.s2 + ")"
@@ -168,13 +165,13 @@ class Parser:
                         return
                     else:
                         self.doubleAssign += 1
-                        self.s = " (stmt-seq (stmt-seq (statement "+self.s+"))(statement "+self.s+") )"  # bug fix trial
+                        self.s = " (stmt-seq (stmt-seq (statement " + self.s + "))(statement " + self.s + ") )"  # bug fix trial
                         del self.stack[i]
                         del self.stack[i - 1]
                         if self.language[self.cursor] == "if":
-                            self.cursor+=8
+                            self.cursor += 8
                         else:
-                            self.cursor+=4
+                            self.cursor += 4
 
                         self.stack.append("stmt-seq")
                         y = table.stmtseq[self.stack[len(self.stack) - 2]]
@@ -188,7 +185,7 @@ class Parser:
             while i >= 0:
                 if (i > 8 and self.stack[i - 1] == "end" and self.stack[i - 3] == "stmt-seq" and
                         self.stack[i - 5] == "then" and self.stack[i - 7] == "number" and self.stack[i - 9] == "if"):
-                    if self.s2!="":
+                    if self.s2 != "":
                         self.s = "(if-stmt if number then " + self.s2 + " end)"
                     else:
                         self.s = "(if-stmt if number then " + self.s + " end)"
@@ -212,8 +209,7 @@ class Parser:
         elif rule == 6:
             while i >= 0:
                 if (i > 6 and self.stack[i - 1] == ";" and self.stack[i - 3] == "factor" and self.stack[i - 5] == ":="
-                        and self.stack[i - 7] == "identifier" ):
-
+                        and self.stack[i - 7] == "identifier"):
                     self.s = " (assign-stmt ID := " + self.s + " ;)"
 
                     del self.stack[i]
@@ -257,7 +253,6 @@ class Parser:
                     y = table.factor[self.stack[len(self.stack) - 2]]
                     self.stack.append(y)
                     return
-
 
                 i -= 1
             self.notAccepted()

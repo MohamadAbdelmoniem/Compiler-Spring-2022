@@ -42,8 +42,8 @@ class WelcomeScreen(QMainWindow):
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
-class ParseTableScreen(QDialog):
-    def __int__(self):
+class ParseTableScreen(QMainWindow):
+    def __init__(self):
         super(ParseTableScreen, self).__init__()
         loadUi("ParseTableWindow.ui", self)
         self.backButton.clicked.connect(self.GoToScreen1)
