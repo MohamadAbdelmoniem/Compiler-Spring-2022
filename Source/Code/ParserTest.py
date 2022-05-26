@@ -10,19 +10,27 @@ class Parser:
         self.input = "if 50 then if 5 then x := 55 ; end "
         self.s = ''
         self.s2 = ""
-        self.double = 0
+        self.doubleAssign = 0
         self.cursor = 0
         self.accepted = False
         self.stack = [0]
         self.language = []
 
     def set_input(self, text):
-
-        self.input = text
+        self.input=""
+        self.s=""
+        self.accepted=False
+        self.s2=""
         self.cursor = 0
+        self.doubleAssign=0
         self.stack = [0]
-        self.inputToken = self.lexer()
+        self.inputToken=[]
         self.language = []
+        self.input = text
+        self.inputToken = self.lexer()
+
+
+
 
     def lexer(self):
 
@@ -78,6 +86,7 @@ class Parser:
                 self.language.append('x')  # not a valid lexeme
 
         self.language.append('$')
+
         return self.language
 
     def shift(self, x):
@@ -85,17 +94,18 @@ class Parser:
         self.stack.append(self.language[self.cursor])
 
         self.stack.append(x)
+        print(self.stack)
         self.cursor = self.cursor + 1
         print("cursor is " + str(self.cursor))
 
     def reduce(self, rule):
-        double = 0
+        doubleAssign = 0
         i = len(self.stack) - 1
         if rule == 1:
 
             while i >= 0:
                 if i > 2 and self.stack[i - 1] == "statement" and self.stack[i - 3] == "stmt-seq":
-                    if double < 1 :
+                    if doubleAssign < 1 :
                         self.s = "(stmt-seq " + self.s + " statement)"
                     else:
                         self.s = "(stmt-seq " + self.s2 + ")"
@@ -154,8 +164,8 @@ class Parser:
                         self.stack.append(y)
                         return
                     else:
-                        double += 1
-                        self.s = "(stmt-seq (statement (if-stmt if number then (stmt-seq (stmt-seq (statement "+self.s+"))(statement "+self.s+")) end)))"  # bug fix trial
+                        doubleAssign += 1
+                        self.s = " (stmt-seq (stmt-seq (statement "+self.s+"))(statement "+self.s+") )"  # bug fix trial
                         del self.stack[i]
                         del self.stack[i - 1]
                         self.cursor+=4
