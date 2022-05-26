@@ -155,7 +155,7 @@ class Parser:
                         return
                     else:
                         double += 1
-                        self.s = "(stmt-seq (statement (if-stmt if number then (stmt-seq (stmt-seq (statement (assign-stmt ID := (factor number) ;)))(statement (assign-stmt ID := (factor number) ;))) end)))"  # bug fix trial
+                        self.s = "(stmt-seq (statement (if-stmt if number then (stmt-seq (stmt-seq (statement "+self.s+"))(statement "+self.s+")) end)))"  # bug fix trial
                         del self.stack[i]
                         del self.stack[i - 1]
                         self.cursor+=4
