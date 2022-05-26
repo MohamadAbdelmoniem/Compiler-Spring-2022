@@ -1,2 +1,2 @@
-if 50 then if 5 then x := 55 ; end end
-if 90 then x:=130 ; z:=540; end
+(statement (assign-stmt ID := (factor number) ;)))
+(statement (if-stmt if number then (stmt-seq (assign-stmt ID := (factor number) ;))))

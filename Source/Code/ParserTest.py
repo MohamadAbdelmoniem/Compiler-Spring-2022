@@ -151,7 +151,7 @@ class Parser:
                         return
                     else:
                         double += 1
-                        self.s1 = "(stmt-seq (statement " + self.s2 + "))"  # bug fix trial
+                        self.s1 = "(stmt-seq (stmt-seq " + self.s2 + "))"  # bug fix trial
                         del self.stack[i]
                         del self.stack[i - 1]
                         self.stack.append("statement")
@@ -187,7 +187,7 @@ class Parser:
         elif rule == 6:
             while i >= 0:
                 if (i > 6 and self.stack[i - 1] == ";" and self.stack[i - 3] == "factor" and self.stack[i - 5] == ":="
-                        and self.stack[i - 7] == "identifier"):
+                        and self.stack[i - 7] == "identifier" ):
                     if double<1:
                         self.s = " (assign-stmt ID := " + self.s + " ;)"
                     else:
