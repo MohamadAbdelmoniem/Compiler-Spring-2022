@@ -1,2 +1,0 @@
-if 50 then if 5 then x := 55 ; end end
-if 90 then x:=130 ; z:=540; end

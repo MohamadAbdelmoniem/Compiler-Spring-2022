@@ -14,12 +14,16 @@ class WelcomeScreen(QMainWindow):
         self.AddCodeButton.clicked.connect(self.addCode)
         self.DFAButton.clicked.connect(self.draw_dfa)
         self.ParserButton.clicked.connect(self.draw_parseTree)
-        self.ShowParseTableButton.clicked.connect(self.showParseTableImageScreen)
+        '''self.ShowParseTableButton.clicked.connect(self.showParseTableImageScreen)'''
 
     def addCode(self):
         parser.p.reset_parser()
         parser.p.set_input(self.InputTextBox.toPlainText())
-        print(parser.p.input)
+        print(f"cursor{parser.p.cursor}")
+        print(f"stack{parser.p.stack}")
+        print(f"s{parser.p.s}")
+        print(f"input{parser.p.input}")
+        print(f"accpeted{parser.p.accepted}")
         lexer.l.set_input(self.InputTextBox.toPlainText())
 
     def draw_dfa(self):
@@ -28,16 +32,17 @@ class WelcomeScreen(QMainWindow):
 
     def draw_parseTree(self):
         parser.p.reset_parser()
-        treeS = None
         parser.p.set_input(self.InputTextBox.toPlainText())
+        parser.p.s = ''
         parser.p.lexer()
         print(f"here {parser.p.language} ")
         parser.p.parse()
+        print(parser.p.s)
         treeS = nltk.Tree.fromstring(parser.p.s)
         if parser.p.accepted:
             parser.draw_trees(treeS)
 
-    def showParseTableImageScreen(self):
+    """def showParseTableImageScreen(self):
         Screen2 = ParseTableScreen()
         widget.addWidget(Screen2)
         widget.setCurrentIndex(widget.currentIndex() + 1)
@@ -53,7 +58,7 @@ class ParseTableScreen(QDialog):
         screen1 = WelcomeScreen()
         widget.addWidget(screen1)
         widget.setCurrentIndex(widget.currentIndex() + 1)
-
+"""
 
 # main
 

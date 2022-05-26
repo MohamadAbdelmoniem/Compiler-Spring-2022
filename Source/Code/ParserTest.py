@@ -7,7 +7,7 @@ import ParsingTable as table
 class Parser:
 
     def __init__(self):
-        self.input = None
+        self.input = "if 5 then x:=5;y:=5; end"
         self.s = ''
         self.cursor = 0
         self.accepted = False
