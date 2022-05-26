@@ -7,15 +7,7 @@ import ParsingTable as table
 class Parser:
 
     def __init__(self):
-        self.input = None
-        self.s = ''
-        self.cursor = 0
-        self.accepted = False
-        self.stack = [0]
-        self.language = []
-
-    def reset_parser(self):
-        self.input = None
+        self.input = "if 50 then if 5 then x := 55 ; end "
         self.s = ''
         self.cursor = 0
         self.accepted = False
@@ -23,10 +15,16 @@ class Parser:
         self.language = []
 
     def set_input(self, text):
+
         self.input = text
+        self.cursor = 0
+        self.stack = [0]
+        self.inputToken=self.lexer()
+        self.language = []
+
 
     def lexer(self):
-        self.accepted = False
+
         # defining tokens
         operators = "(:=)"
         keywords = "if|then|else|end"
@@ -96,7 +94,7 @@ class Parser:
 
             while i >= 0:
                 if i > 0 and self.stack[i - 1] == "statement" and self.stack[i - 3] == "stmt-seq":
-                    self.s = "(stmt-seq " + self.s + ")"
+                    self.s = "(stmt-seq " + self.s + " statement)"
                     del self.stack[i]
                     del self.stack[i - 1]
                     del self.stack[i - 2]
@@ -252,53 +250,53 @@ class Parser:
 
     def parse(self):
 
-        inputToken = self.language[self.cursor]
-        print(inputToken)
+        self.inputToken = self.language[self.cursor]
+        print(self.inputToken)
         top = self.stack[len(self.stack) - 1]  # stores the top of stack
         if isinstance(top, int):  # checks if top of stack is integer
             print("iteration")
-            if inputToken == "if":  # if the input equals if
+            if self.inputToken == "if":  # if the input equals if
                 x = table.If[top]  # retrieves the parsing table action in string
                 self.action(x)
 
-            elif inputToken == "number":
+            elif self.inputToken == "number":
                 x = table.number[top]
                 print("number top is " + str(x))
                 self.action(x)
 
-            elif inputToken == ":=":
+            elif self.inputToken == ":=":
                 x = table.equal[top]
                 self.action(x)
-            elif inputToken == "identifier":
+            elif self.inputToken == "identifier":
                 x = table.id[top]
                 self.action(x)
-            elif inputToken == "then":
+            elif self.inputToken == "then":
                 x = table.then[top]
                 self.action(x)
-            elif inputToken == "end":
+            elif self.inputToken == "end":
                 x = table.end[top]
                 self.action(x)
-            elif inputToken == ";":
+            elif self.inputToken == ";":
                 x = table.semicolon[top]
                 self.action(x)
-            elif inputToken == "$":
+            elif self.inputToken == "$":
                 x = table.dollar[top]
                 self.action(x)
 
         else:
-            if inputToken == "stmt-seq":
+            if self.inputToken == "stmt-seq":
                 x = table.stmtseq[top - 1]
                 self.stack.append(x[1])
-            elif inputToken == "statement":
+            elif self.inputToken == "statement":
                 x = table.statement[top - 1]
                 self.stack.append(x[1])
-            elif inputToken == "if-stmt":
+            elif self.inputToken == "if-stmt":
                 x = table.ifstmt[top - 1]
                 self.stack.append(x[1])
-            elif inputToken == "assign-stmt":
+            elif self.inputToken == "assign-stmt":
                 x = table.assignstmt[top - 1]
                 self.stack.append(x[1])
-            elif inputToken == "factor":
+            elif self.inputToken == "factor":
                 x = table.factor[top - 1]
                 self.stack.append(x[1])
 
